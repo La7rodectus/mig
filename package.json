@@ -1,7 +1,7 @@
 {
   "name": "mig",
   "version": "0.0.1",
-  "description": "Template for node.js apps",
+  "description": "lib for db migrations.",
   "main": "index.js",
   "directories": {
     "test": "test"
