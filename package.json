@@ -3,6 +3,9 @@
   "version": "0.0.2",
   "description": "lib for db migrations.",
   "main": "index.js",
+  "bin": {
+    "mig": "./src/cli/index.js"
+  },
   "directories": {
     "test": "test"
   },

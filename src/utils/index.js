@@ -1,3 +1,3 @@
-const { exportFolderSync } = require('./helpers');
+const { exportFolder } = require('./helpers');
 
-exportFolderSync(__dirname, __filename, module);
+exportFolder(__dirname, __filename, module);

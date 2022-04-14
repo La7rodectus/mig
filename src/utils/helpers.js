@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-function exportFolderSync(dir, file, module) {
+function exportFolder(dir, file, module) {
   fs.readdirSync(dir).forEach((fileName) => {
     if (fileName === path.basename(file)) return;
     const exported = require(path.resolve(dir, fileName));
@@ -27,7 +27,7 @@ function capitalizeFirst(str) {
 }
 
 module.exports = {
-  exportFolderSync,
+  exportFolder,
   capitalizeFirst,
   isClass
 };
