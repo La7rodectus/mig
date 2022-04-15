@@ -1,15 +1,15 @@
 class CliArgumentsParser {
-  #prepArgs(rawArgs) {
+  #prepArgs(rawFlags) {
     const res = {};
-    for (const arg of Object.values(rawArgs)) {
-      res[arg.name] = arg;
-      res[arg.alias] = arg;
+    for (const flag of Object.values(rawFlags)) {
+      res[flag.name] = flag;
+      res[flag.alias] = flag;
     }
     return res;
   }
 
-  constructor(args) {
-    this.args = this.#prepArgs(args);
+  constructor(flags) {
+    this.flags = this.#prepArgs(flags);
   }
 
   parse(argArr) {
@@ -20,7 +20,7 @@ class CliArgumentsParser {
 
       const prefix = this.#getFlagPrefix(el);
       const flag = el.slice(-prefix);
-      const flagConf = this.args[flag];
+      const flagConf = this.flags[flag];
 
       if (!flagConf) throw new SyntaxError('Unknown flag!');
       if (!flagConf.arguments) { //bool flag
@@ -28,12 +28,16 @@ class CliArgumentsParser {
       }
 
       res[flagConf.name] = [];
+      const oneOf = flagConf.arguments.oneOf;
+
       if (flagConf.arguments.strictLen) {
-        step = flagConf.arguments.strictLen;
-        for (let j = 0; j < step; j++) {
+        step += flagConf.arguments.len;
+        for (let j = 1; j < step; j++) {
           const arg = argArr[i + j];
           if (arg) new SyntaxError('Invalid number arguments!');
-          if (this.#getFlagPrefix(arg)) new SyntaxError('Bad argument!');
+          if (this.#getFlagPrefix(arg)) throw new SyntaxError('Bad argument!');
+
+          if (oneOf && !oneOf.includes(arg)) throw new SyntaxError(`Should be one of => [${oneOf.join(', ')}]`);
           res[flagConf.name].push(arg);
         }
       } else {
@@ -41,10 +45,12 @@ class CliArgumentsParser {
           const nextArg = argArr[i + step];
           if (!nextArg) break;
           if (this.#getFlagPrefix(nextArg)) break;
+
+          if (oneOf && !oneOf.includes(nextArg)) throw new SyntaxError(`Should be one of => [${oneOf.join(', ')}]`);
           res[flagConf.name].push(nextArg);
           step++;
         } while (true);
-        if (res[flagConf.name].length < flagConf.arguments.min) new SyntaxError('Not enough arguments!');
+        if (res[flagConf.name].length < flagConf.arguments.min) throw new SyntaxError('Not enough arguments!');
       }
 
       i += step;
