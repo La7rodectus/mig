@@ -1,18 +1,18 @@
-const { commands } = require('../index');
+const cmds = require('./commands');
 
-const args = require('./arguments');
 const { CliArgumentsParser } = require('./parsers');
-
-const cliArgP = new CliArgumentsParser(args);
 
 const cmdName = process.argv[2];
 console.log('cmd name =>', cmdName);
 
+const cmd = cmds[cmdName];
+console.log('command =>', cmd);
+
+if (!cmd) throw new SyntaxError('Unknown command!');
+
+const cliArgP = new CliArgumentsParser(cmd.flags);
+
 console.log('arg array =>', process.argv.slice(3));
-const flags = cliArgP.parse(process.argv.slice(3));
+const appliedFlags = cliArgP.parse(process.argv.slice(3));
 
-const command = commands[cmdName];
-
-console.log('command =>', command);
-
-console.log('flags =>', flags);
+console.log('flags =>', appliedFlags);
