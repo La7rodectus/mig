@@ -4,6 +4,9 @@ node_modules
 # dep lock file
 package-lock.json
 
+# dev tests folder
+/db
+
 # local env files
 .env.local
 .env.*.local
