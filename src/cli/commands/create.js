@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const tmplts = require('../../templates');
 const mig = require('../../index');
 
@@ -46,11 +44,13 @@ const flags = {
 
 
 function action(appliedFlags) {
-  console.log(process.cwd());
 
-  utils.helpers.mkFile(utils.helpers.getPathForNewFile(appliedFlags.name), 'i am mig');
+  const templateFunction = tmplts.migrations[appliedFlags.entity[0]];
 
-  console.log('appliedFlags', appliedFlags);
+  const text = templateFunction(appliedFlags.name, `actions.CREATE`);
+
+  utils.helpers.mkFile(utils.helpers.getPathForNewFile(appliedFlags.name), text);
+
   return true;
 }
 

@@ -37,13 +37,12 @@ function mkFile(destination, data) {
     relative.reduce((acc, el) => {
       acc.push(el);
       const fullPath = path.resolve(process.cwd(), ...acc);
-      console.log(fullPath);
       try {
         if (!fs.statSync(fullPath).isDirectory()) {
           throw new Error(`Name *${el}* by path *${fullPath}* taken by non-directory file!`);
         }
       } catch (err) {
-        if (err.code === 'EEXIST') fs.mkdirSync(fullPath);
+        if (err.code === 'ENOENT') fs.mkdirSync(fullPath);
         else throw err;
       }
       return acc;
