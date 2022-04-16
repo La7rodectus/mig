@@ -16,3 +16,5 @@ console.log('arg array =>', process.argv.slice(3));
 const appliedFlags = cliArgP.parse(process.argv.slice(3));
 
 console.log('flags =>', appliedFlags);
+
+console.log('Action result =>', cmd.action(appliedFlags));

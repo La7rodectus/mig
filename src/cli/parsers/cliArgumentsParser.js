@@ -10,6 +10,7 @@ class CliArgumentsParser {
 
   constructor(flags) {
     this.flags = this.#prepArgs(flags);
+    this.rawFlags = flags;
   }
 
   parse(argArr) {
@@ -55,6 +56,16 @@ class CliArgumentsParser {
 
       i += step;
     }
+
+    const requiredFlags = Object.values(this.rawFlags).filter((f) => f.required).map((f) => f.name);
+    const appliedFlags = Object.keys(res).filter((f) => requiredFlags.includes(f));
+    const appliedFlagsEntry = appliedFlags.reduce((acc, val) => ({
+      ...acc,
+      [val]: (acc[val] || 0) + 1
+    }), {});
+    const isAllRequiredPresent = requiredFlags.every((f) => appliedFlagsEntry[f] === 1);
+    if (!isAllRequiredPresent) throw new SyntaxError('Required flag not found!');
+
     return res;
   }
   /**

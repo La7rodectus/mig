@@ -41,6 +41,7 @@ const flags = {
 
 
 function action(appliedFlags) {
+  console.log('appliedFlags', appliedFlags);
   return true;
 }
 
