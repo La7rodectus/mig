@@ -26,8 +26,37 @@ function capitalizeFirst(str) {
   return str[0].toUpperCase() + str.slice(1);
 }
 
+function getPathForNewFile(name, relative = ['db', 'mig']) {
+  const filename = `${Date.now()}_${name}.mig.js`;
+  return path.resolve(...relative, filename);
+}
+
+function mkFile(destination, data) {
+  const relative = path.relative(process.cwd(), destination).split(path.sep).slice(0, -1);
+  if (relative.length) {
+    relative.reduce((acc, el) => {
+      acc.push(el);
+      const fullPath = path.resolve(process.cwd(), ...acc);
+      console.log(fullPath);
+      try {
+        if (!fs.statSync(fullPath).isDirectory()) {
+          throw new Error(`Name *${el}* by path *${fullPath}* taken by non-directory file!`);
+        }
+      } catch (err) {
+        if (err.code === 'EEXIST') fs.mkdirSync(fullPath);
+        else throw err;
+      }
+      return acc;
+    }, []);
+  }
+  fs.appendFileSync(destination, data);
+
+}
+
 module.exports = {
   exportFolder,
   capitalizeFirst,
-  isClass
+  isClass,
+  getPathForNewFile,
+  mkFile
 };

@@ -1,4 +1,9 @@
-const { enums } = require('../../index');
+const fs = require('fs');
+const path = require('path');
+const tmplts = require('../../templates');
+const mig = require('../../index');
+
+const { enums, utils } = mig;
 
 const flags = {
   entity: {
@@ -41,6 +46,10 @@ const flags = {
 
 
 function action(appliedFlags) {
+  console.log(process.cwd());
+
+  utils.helpers.mkFile(utils.helpers.getPathForNewFile(appliedFlags.name), 'i am mig');
+
   console.log('appliedFlags', appliedFlags);
   return true;
 }

@@ -1,3 +1,6 @@
+const fs = require('fs');
+
+
 const cmds = require('./commands');
 
 const { CliArgumentsParser } = require('./parsers');
