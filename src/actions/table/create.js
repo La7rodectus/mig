@@ -1,5 +1,5 @@
 
-function action(migration) {
+async function action(migration) {
 
 }
 
